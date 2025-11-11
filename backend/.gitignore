@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+
+# build output
+dist/
+build/
+coverage/
+
+# dependencies
+package-lock.json
+npm-shrinkwrap.json
+
+# environment variables
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# misc
+.DS_Store
+Thumbs.db
+*.log
+*.tgz
+.idea/
+.vscode/
+.gitkeep
