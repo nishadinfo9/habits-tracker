@@ -2,38 +2,45 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const userSchema = new Schema({
-  fullName: {
-    type: String,
-    required: true,
+const userSchema = new Schema(
+  {
+    fullName: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      trim: true,
+      index: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    avatar: {
+      type: String,
+      default: "",
+    },
+    refreshToken: {
+      type: String,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    trim: true,
-    index: true,
-    lowercase: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  avatar: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 //mongoose pre middleware
 userSchema.pre("save", async function (next) {
-  if (!this.isModified(this.password)) return next();
-  this.password = bcrypt.hash(this.password, 10);
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
 //custom method isPasswordCorrect
 userSchema.methods.isPasswordCorrect = async function (password) {
+  console.log("model", password);
   return await bcrypt.compare(password, this.password);
 };
 
@@ -46,7 +53,7 @@ userSchema.methods.generateAccessToken = function () {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: ACCESS_TOKEN_EXPIRY,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
     }
   );
 };

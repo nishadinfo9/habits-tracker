@@ -1,20 +1,18 @@
-import { ApiError } from "./ApiError.js";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDE_NAME,
+  cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
 const uploadOnCloudinary = async (localFile) => {
   try {
-    if (!localFile) {
-      throw new ApiError(401, "file does not exist");
-    }
+    if (!localFile) return null;
     const response = await cloudinary.uploader.upload(localFile, {
       resource_type: "auto",
     });
+    console.log("first", response);
     fs.unlinkSync(localFile);
     return response;
   } catch (error) {
