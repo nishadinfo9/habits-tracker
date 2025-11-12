@@ -6,11 +6,7 @@ dotenv.config({ path: "./.env" });
 
 // middlewares
 const app = express();
-const allowOrigins = [
-  "http://localhost:5173",
-  "https://habits-tracker-kappa.vercel.app",
-  "https://habits-tracker-nishad-hasans-projects.vercel.app",
-];
+const allowOrigins = ["http://localhost:5173"];
 
 app.use(
   cors({
