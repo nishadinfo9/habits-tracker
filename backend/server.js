@@ -1,11 +1,9 @@
 import app from "./app.js";
 import connectDB from "./src/db/db.js";
+import { VercelRequest, VercelResponse } from "@vercel/node";
+import serverless from "serverless-http";
 
 const port = process.env.PORT || 3000;
-
-app.get("/", async (req, res) => {
-  res.send("hello world");
-});
 
 connectDB()
   .then(() => {
@@ -14,3 +12,6 @@ connectDB()
     });
   })
   .catch((err) => console.log(err));
+
+export const handler = serverless(app);
+export default handler;

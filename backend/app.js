@@ -6,7 +6,26 @@ dotenv.config({ path: "./.env" });
 
 // middlewares
 const app = express();
-app.use(cors({ origin: "http://localhost:5173" }));
+const allowOrigins = [
+  "http://localhost:5173",
+  "https://habits-tracker-kappa.vercel.app",
+  "https://habits-tracker-nishad-hasans-projects.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || !allowOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("origin not allow"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+// app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use(express.urlencoded({ limit: "16kb" }));
 app.use(cookieParser());
@@ -18,5 +37,7 @@ import habitRouter from "./src/routes/habit.router.js";
 // declear routes
 app.use("/api/v1", userRouter);
 app.use("/api/v1", habitRouter);
+
+app.get("/", (req, res) => res.send("Backend is running!"));
 
 export default app;
