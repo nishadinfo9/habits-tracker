@@ -141,12 +141,15 @@ const isCompleteHabit = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "local date not working");
   }
 
-  isComplete.completionHistory.push(localDate);
-  await isComplete.save();
+  if (!isComplete.completionHistory.includes(localDate)) {
+    isComplete.completionHistory.push(localDate);
+    await isComplete.save();
+  }
+  const stack = isComplete.completionHistory.length;
 
   return res
     .status(200)
-    .json(new ApiResponse(200, isComplete, "habit created successfully"));
+    .json(new ApiResponse(200, {isComplete, stack}, "habit created successfully"));
 });
 
 export {
