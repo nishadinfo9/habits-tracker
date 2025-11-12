@@ -14,7 +14,7 @@ const allowOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || !allowOrigins.includes(origin)) {
+      if (!origin || allowOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("origin not allow"));
